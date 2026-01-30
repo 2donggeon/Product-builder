@@ -2,6 +2,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const generateBtn = document.getElementById('generate-btn');
     const lottoNumbers = document.querySelectorAll('.lotto-number');
     const historyList = document.getElementById('history-list');
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const docHtml = document.documentElement;
+
+    const applyTheme = (theme) => {
+        docHtml.setAttribute('data-theme', theme);
+        if (theme === 'dark') {
+            themeToggleBtn.textContent = '☀️';
+        } else {
+            themeToggleBtn.textContent = '🌙';
+        }
+    };
+
+    const toggleTheme = () => {
+        const currentTheme = docHtml.getAttribute('data-theme') || 'light';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('theme', newTheme);
+        applyTheme(newTheme);
+    };
+
+    themeToggleBtn.addEventListener('click', toggleTheme);
+
+    // Apply saved theme on load
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    applyTheme(savedTheme);
+
 
     const generateNumbers = () => {
         const numbers = new Set();
@@ -14,6 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const displayNumber = (number, index) => {
         const lottoNumber = lottoNumbers[index];
         lottoNumber.textContent = number;
+        // The background color is now handled by CSS variables, 
+        // but we can keep the specific color logic for the numbers if we want
         lottoNumber.style.backgroundColor = getNumberColor(number);
     };
 
